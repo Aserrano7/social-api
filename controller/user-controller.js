@@ -56,6 +56,38 @@ const UserController = {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   },
+
+  async addFriend(req, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $addToSet: { friends: req.body.friendId } },
+        { new: true }
+      );
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      res.json(user);
+    } catch (err) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  },
+
+  async removeFriend(req, res) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: req.params.userId },
+        { $pull: { friends: req.params.friendId } },
+        { new: true }
+      );
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      res.json({ message: 'Friend removed successfully', user });
+    } catch (err) {
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  },
 };
 
 module.exports = UserController;
