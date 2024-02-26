@@ -1,4 +1,5 @@
-const { Thought } = require('../models');
+const { Thought} = require('../models');
+
 
 const ThoughtController = {
   async getAllThoughts(req, res) {
